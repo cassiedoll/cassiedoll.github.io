@@ -28,12 +28,10 @@ limitations under the License.
     margin: 1em;
   }
 
-  .wrapper {
-    padding: 1em;
-  }
   .result {
     background-color: #f2e8d5;
     padding: 1em 0 1em 1em;
+    margin: 1em;
   }
   .result .header {
     cursor: pointer;
@@ -49,6 +47,10 @@ limitations under the License.
   .result .description {
     font-size: 1.25em;
     margin-bottom: .5em;
+  }
+  .result .fatalError {
+    padding-top: .75em;
+    font-weight: bold;
   }
   .result .score {
     padding: .25em;
@@ -179,8 +181,8 @@ limitations under the License.
   }
 
   function getUrl(path) {
-    var l = document.createElement("a");
-    l.href = $("#endpoint").val();
+    var l = document.createElement('a');
+    l.href = $('#endpoint').val();
     l.pathname += path;
     return l.href;
   }
@@ -316,11 +318,8 @@ limitations under the License.
     });
   }
 
-  var totalScore = 0;
-  var totalTests = 0;
   function testComplete(result) {
-    var div = $('<div/>', {class: 'wrapper'}).appendTo(results);
-    div = $('<div/>', {class: 'result'}).appendTo(div);
+    var div = $('<div/>', {class: 'result'}).appendTo(results);
 
     function makeDiv(text, className, parent) {
       return $('<div/>', {class: className || ''}).text(text).appendTo(parent || div);
@@ -330,8 +329,11 @@ limitations under the License.
     var header = $('<div/>', {class : 'header', 'data-toggle' : 'collapse',
       'data-target': '#' + result.id}).appendTo(div);
     var title = makeDiv(result.title, 'title', header);
-    $("<a/>", {href: result.docLink, class: 'glyphicon glyphicon-file',
-      target: '_blank', title: 'API Documentation'}).appendTo(title);
+    $('<a/>', {href: result.docLink, class: 'glyphicon glyphicon-file',
+      target: '_blank', title: 'API Documentation'})
+        .appendTo(title).click(function(e) {
+          e.stopPropagation();
+        });
 
     makeDiv(result.description, 'description', header);
 
@@ -357,7 +359,7 @@ limitations under the License.
 
     if (result.fatalErrors.length > 0) {
       _.map(result.fatalErrors, function(x) {
-        makeDiv(x, '', details);
+        makeDiv(x, 'fatalError', details);
       });
       makeDiv('Testing could not complete due to errors', '', details);
     }
@@ -365,21 +367,14 @@ limitations under the License.
     $('<div/>', {class: 'score pull-right ' + scoreColor(total, score)})
         .text(scoreLabel(total, score)).prependTo(title);
 
-    totalTests += total;
-    totalScore += score;
-
-    // All tests complete
-    // TODO: Stop hardcoding this value
-    if (results.children().length == 8) {
-       testsFinished(totalScore, totalTests);
-    }
+    result.testFinished(total, score);
   }
 
   function scoreLabel(total, score) {
     if (score == total) {
       return total;
     } else {
-      return score + "/" + total;
+      return score + '/' + total;
     }
   }
 
@@ -396,62 +391,75 @@ limitations under the License.
     }
   }
 
-  function makeResultContainer(id, title, description, docLink) {
-    return {id: id, title: title, description: description, docLink: docLink,
-      fatalErrors: [], tests: []};
-  }
-
-  function testsFinished(totalScore, totalTests) {
-    formButton.button('reset');
-    overallScore.empty();
-    $('<div/>').text('this API scores').appendTo(overallScore);
-    $('<div/>').text(totalScore).attr('class', scoreColor(totalScore, totalTests)).appendTo(overallScore);
-    $('<div/>').text('out of ' + totalTests + ' points').appendTo(overallScore);
-  }
-
   function runTests() {
     results.empty();
     formButton.button('loading');
 
-    totalScore = 0;
-    totalTests = 0;
+    var totalScore = 0;
+    var totalTests = 0;
 
-    // v0.5
+    var tests = [];
+    var testsFinished = 0;
+    function testFinished(total, score) {
+      totalTests += total;
+      totalScore += score;
+      testsFinished++;
+
+      if (testsFinished == tests.length) {
+        formButton.button('reset');
+        overallScore.empty();
+        $('<div/>').text('this API scores').appendTo(overallScore);
+        $('<div/>').text(totalScore)
+            .attr('class', scoreColor(totalScore, totalTests))
+            .appendTo(overallScore);
+        $('<div/>').text('out of ' + totalTests + ' points').appendTo(overallScore);
+      }
+    }
+
+    function addTest(title, description, docLink, test) {
+      var resultContainer = {id: 'test' + tests.length, title: title,
+        description: description, docLink: docLink,
+        fatalErrors: [], tests: [], testFinished: testFinished};
+      tests.push(resultContainer);
+      return resultContainer;
+    }
+
     var datasetId = $('#datasetId').val();
 
+    // v0.5
     var docUrlPrefix = 'http://ga4gh.org/documentation/api/v0.5/ga4gh_api.html#/schema/';
-    testReadGroupSetSearch(makeResultContainer(1,
+    testReadGroupSetSearch(addTest(
         'Search Reference Sets',
         'Fetches reference sets',
         docUrlPrefix + 'org.ga4gh.GASearchReferenceSetsRequest'), datasetId);
-    testReadGroupSetSearch(makeResultContainer(2,
+    testReadGroupSetSearch(addTest(
         'Search References',
         'Fetches references',
         docUrlPrefix + 'org.ga4gh.searchReferences'), datasetId);
-    testReadGroupSetSearch(makeResultContainer(3,
+    testReadGroupSetSearch(addTest(
         'Search Read Group Sets',
         'Fetches read group sets from the specified dataset',
         docUrlPrefix + 'org.ga4gh.searchReadGroupSets'), datasetId);
-    testReadGroupSetSearch(makeResultContainer(4,
+    testReadGroupSetSearch(addTest(
         'Search Reads',
         'Looks up a readset for NA12878 from the specified dataset, then fetches reads.',
         docUrlPrefix + 'org.ga4gh.searchReads'), datasetId);
-    testReadGroupSetSearch(makeResultContainer(5,
+    testReadGroupSetSearch(addTest(
         'Search Variants',
         'Fetches variants from the specified dataset.',
         docUrlPrefix + 'org.ga4gh.searchVariants'), datasetId);
-    testReadGroupSetSearch(makeResultContainer(6,
+    testReadGroupSetSearch(addTest(
         'Search Call Sets',
         'Fetches call sets from the specified dataset.',
         docUrlPrefix + 'org.ga4gh.searchCallSets'), datasetId);
 
 
     // v0.1
-    testReadsetSearchv01(makeResultContainer(7,
+    testReadsetSearchv01(addTest(
         'Search Readsets (v0.1)',
         'Fetches readsets from the specified dataset and tests their fields.',
         'http://ga4gh.org/#/apis/reads/v0.1/readsets'), datasetId);
-    testReadSearchv01(makeResultContainer(8,
+    testReadSearchv01(addTest(
         'Search Reads (v0.1)',
         'Looks up a readset for NA12878 from the specified dataset, then fetches reads.',
         'http://ga4gh.org/#/apis/reads/v0.1/reads/search'), datasetId);
