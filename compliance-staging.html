@@ -174,9 +174,8 @@ limitations under the License.
 
   function assertArrayObject(result, parent, objectName, prefix, fields) {
     var objects = parent[objectName] || [];
-    if (!assert(result, objects.length > 0, 'Field ' + prefix + objectName + ' is non-empty')) {
-      assertFields(result, objects[0], prefix + objectName + '.', fields);
-    }
+    assert(result, objects.length > 0, 'Field ' + prefix + objectName + ' is non-empty');
+    assertFields(result, _.first(objects) || {}, prefix + objectName + '.', fields);
   }
 
   function getUrl(path) {
@@ -419,6 +418,7 @@ limitations under the License.
 
     // v0.5
     var datasetId = $('#datasetId').val();
+
     var docUrlPrefix = 'http://ga4gh.org/documentation/api/v0.5/ga4gh_api.html#/schema/';
     testReadGroupSetSearch(makeResultContainer(1,
         'Search Reference Sets',
