@@ -49,18 +49,29 @@ function assertField(runner, fieldValue, fieldName, fieldType) {
   if (valueExists) {
     fieldType = fieldType || 'string';
 
-    var message = 'Field ' + fieldName + ' is a ' + fieldType;
-    var test = typeof fieldValue == fieldType;
-
+    var test;
     if (fieldType == 'long') {
       // Longs in json are typically formatted as strings,
       // yet should be parseable as numbers
       test = !_.isNaN(parseInt(fieldValue));
+
     } else if (fieldType == 'array') {
       // typeof doesn't work on arrays
       test = _.isArray(fieldValue);
+
+    } else if (fieldType == 'keyvalue') {
+      // This is the json version of the GAKeyValue object
+      test = _.isObject(fieldValue) && _.every(fieldValue, function(v, k) {
+        return typeof v == 'string' && typeof k == 'string';
+      });
+
+    } else {
+      if (fieldType == 'int' || fieldType == 'float') {
+        fieldType = 'number';
+      }
+      test = typeof fieldValue == fieldType;
     }
-    assert(runner, test, message);
+    assert(runner, test, 'Field ' + fieldName + ' is a ' + fieldType);
 
   } else {
     // TODO: Distinguish optional fields from required ones
