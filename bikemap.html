@@ -13,20 +13,32 @@
     #map {
         height: 90vh;
     }
+    #map-container { position: relative; }
+
+    .legend.grow {
+      width: auto !important;
+      height: auto !important;
+    }
+
+    .legend {
+      width: 50px !important;
+      height: 20px !important;
+    }
+    
     .mapboxgl-ctrl-geocoder--input {
         padding: 6px 35px !important;
     }
 
     .legend {
         background-color: #fff;
-        bottom: 30px;
+        border-radius: 3px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         padding: 10px;
-        right: 10px;
         z-index: 1;
-        width: auto;
-        height: auto;
+        position: absolute;
+        bottom: 30px;
+        right: 10px;
         overflow: hidden;
     }
 
@@ -56,17 +68,35 @@
 </head>
   
 <body>
+  
+  <div>Intro text on the website</div>
+  
+  <div id="map-container">
   <div id="map"></div>
   <div id="state-legend" class="grow legend">
     <h4>Legend</h4>
-    <div><span style="background-color: #4db04a;"></span>Paved Path – All riders</div>
-    <div><span class="dashed-green"></span>Unpaved Path – All riders</div>
+    <div>
+      <input type="checkbox" id="pavedpath" name="pavedpath" class="layer-toggle" value="mapbox-satellite">
+      <label for="pavedpath">
+        <span style="background-color: #4db04a;"></span>
+        Paved Path – All riders
+      </label>
+    </div>
+    <div>
+      <input type="checkbox" id="unpavedpath" name="unpavedpath" class="layer-toggle" value="Bike Shops">
+      <label for="unpavedpath">
+        <span class="dashed-green"></span>
+        Unpaved Path – All riders
+      </label>
+    </div>
+    
     <div><span style="background-color: #377eb9;"></span>All riders</div>
     <div><span class="blue-black"></span>Riders with above-average skill</div>
     <div><span style="background-color: #000000;"></span>Experienced riders confident in traffic</div>
     <div><span class="yellow-black"></span>Most difficult sections</div>
     <div><span style="background-color: #bba395;"></span>(Outline) Bike Lanes</div>
     <div><span style="background-color: #ede731;"></span>(Outline) Private Land</div>
+    </div>
 </div>
   
 <script>
@@ -77,7 +107,7 @@
     ];
     var map = new mapboxgl.Map({
         container: "map", // container id
-        style: "mapbox://styles/eric-bendbikes/ckxe04bkf7e0b15qu6qhc2e96", // custom style url from https://studio.mapbox.com/
+        style: 'mapbox://styles/eric-bendbikes/cl2s2ok06003g16mv218usiy3/draft',
         center: ["-121.32225366707608", "44.05843463121357"], // starting position
         zoom: 13.8, // starting zoom
         maxBounds: bounds, // Sets bounds as max
@@ -105,6 +135,18 @@
         })
     );
     map.dragRotate.disable();
+  
+    map.on('load', () => {
+        const layerToggles = document.getElementsByClassName("layer-toggle");
+        for (const layerToggle in layerToggles) {
+          //const mapboxLayerId = layerToggle.value;
+          
+          layerToggle.onclick = function (e) {
+            map.setLayoutProperty(e.value, 'visibility', e.checked ? 'visible' : 'none');
+          }
+          //layerToggle.onclick();
+        }
+  });
 </script>
   </body>
 </html>
