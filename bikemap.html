@@ -67,16 +67,19 @@
 </style>
 </head>
   
-<body>
+<body style="padding: 40px;">
   
-  <div>Intro text on the website</div>
+  <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint 
+    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
   
   <div id="map-container">
   <div id="map"></div>
   <div id="state-legend" class="grow legend">
     <h4>Legend</h4>
     <div>
-      <input type="checkbox" id="pavedpath" class="layer-toggle" value="mapbox-satellite">
+      <input type="checkbox" id="pavedpath" class="layer-toggle" value="Paved Trails - BB, Paved Trails - BRPD">
       <label for="pavedpath">
         <span style="background-color: #4db04a;"></span>
         Paved Path – All riders
@@ -90,7 +93,7 @@
       </label>
     </div>
     
-    <div><span style="background-color: #377eb9;"></span>All riders</div>
+    <div><span style="background-color: #377eb9;"></span>All riders</div>     
     <div><span class="blue-black"></span>Riders with above-average skill</div>
     <div><span style="background-color: #000000;"></span>Experienced riders confident in traffic</div>
     <div><span class="yellow-black"></span>Most difficult sections</div>
@@ -103,10 +106,16 @@
         Bike Shops
       </label>
     </div>
-    <div style="padding-top: 1em">
+    <div>
       <input type="checkbox" id="streetnames" class="layer-toggle" value="road-label">
       <label for="streetnames">
         Street Names
+      </label>
+    </div>
+    <div>
+      <input type="checkbox" id="satellite" class="layer-toggle" value="mapbox-satellite">
+      <label for="satellite">
+        Satellite View
       </label>
     </div>
     
