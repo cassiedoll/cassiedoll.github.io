@@ -76,14 +76,14 @@
   <div id="state-legend" class="grow legend">
     <h4>Legend</h4>
     <div>
-      <input type="checkbox" id="pavedpath" name="pavedpath" class="layer-toggle" value="mapbox-satellite">
+      <input type="checkbox" id="pavedpath" class="layer-toggle" value="mapbox-satellite">
       <label for="pavedpath">
         <span style="background-color: #4db04a;"></span>
         Paved Path – All riders
       </label>
     </div>
     <div>
-      <input type="checkbox" id="unpavedpath" name="unpavedpath" class="layer-toggle" value="Bike Shops">
+      <input type="checkbox" id="unpavedpath" class="layer-toggle" value="Unpaved Trails -- BB,Unpaved Trails - BPRD">
       <label for="unpavedpath">
         <span class="dashed-green"></span>
         Unpaved Path – All riders
@@ -96,6 +96,20 @@
     <div><span class="yellow-black"></span>Most difficult sections</div>
     <div><span style="background-color: #bba395;"></span>(Outline) Bike Lanes</div>
     <div><span style="background-color: #ede731;"></span>(Outline) Private Land</div>
+    
+    <div style="padding-top: 1em">
+      <input type="checkbox" id="bikeshops" class="layer-toggle" value="Bike Shops" checked>
+      <label for="bikeshops">
+        Bike Shops
+      </label>
+    </div>
+    <div style="padding-top: 1em">
+      <input type="checkbox" id="streetnames" class="layer-toggle" value="road-label">
+      <label for="streetnames">
+        Street Names
+      </label>
+    </div>
+    
     </div>
 </div>
   
@@ -138,13 +152,13 @@
   
     map.on('load', () => {
         const layerToggles = document.getElementsByClassName("layer-toggle");
-        for (const layerToggle in layerToggles) {
-          //const mapboxLayerId = layerToggle.value;
-          
-          layerToggle.onclick = function (e) {
-            map.setLayoutProperty(e.value, 'visibility', e.checked ? 'visible' : 'none');
+        for (const i in layerToggles) {
+          layerToggles[i].onclick = function (e) {
+            const layerIds = this.value.split(",");
+            const visibleLayer = this.checked;
+            layerIds.forEach(layerId => map.setLayoutProperty(layerId, 'visibility', visibleLayer ? 'visible' : 'none'));
           }
-          //layerToggle.onclick();
+          layerToggles[i].onclick();
         }
   });
 </script>
