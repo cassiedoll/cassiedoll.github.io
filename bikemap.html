@@ -29,6 +29,9 @@
       width: 50px !important;
       height: 20px !important;
     }
+    #legend-title {
+      cursor: pointer;
+    }
     
     .mapboxgl-ctrl-geocoder--input {
         padding: 6px 35px !important;
@@ -84,14 +87,14 @@
   <div id="state-legend" class="grow legend">
     <h4 id="legend-title">Legend</h4>
     <div>
-      <input type="checkbox" id="pavedpath" class="layer-toggle" value="Paved Trails - BB,Paved Trails - BPRD">
+      <input type="checkbox" id="pavedpath" class="layer-toggle" value="Paved Trails - BB,Paved Trails - BPRD" checked>
       <label for="pavedpath">
         <span style="background-color: #4db04a;"></span>
         Paved Path – All riders
       </label>
     </div>
     <div>
-      <input type="checkbox" id="unpavedpath" class="layer-toggle" value="Unpaved Trails -- BB,Unpaved Trails - BPRD">
+      <input type="checkbox" id="unpavedpath" class="layer-toggle" value="Unpaved Trails -- BB,Unpaved Trails - BPRD" checked>
       <label for="unpavedpath">
         <span class="dashed-green"></span>
         Unpaved Path – All riders
@@ -165,6 +168,9 @@
     map.dragRotate.disable();
   
     // Add support for layer toggling
+    // To enable - add a checkbox with the class "layer-toggle" and then put the layerIds (comma separated) 
+    // you want to toggle as the value attribute. The checked attribute sets the default visibility onload. Example:
+    //   <input type="checkbox" class="layer-toggle" value="Paved Trails - BB,Paved Trails - BPRD" checked>
     map.on('load', () => {
         const layerToggles = document.getElementsByClassName("layer-toggle");
         for (const i in layerToggles) {
