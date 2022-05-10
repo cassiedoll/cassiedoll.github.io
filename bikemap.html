@@ -182,7 +182,7 @@
     //   <input type="checkbox" class="layer-toggle" value="Paved Trails - BB,Paved Trails - BPRD" checked>
     map.on('load', () => {
         const layerToggles = document.getElementsByClassName("layer-toggle");
-        for (const i in layerToggles) {
+        for (let i = 0; i < layerToggles.length; i++) {
           layerToggles[i].onclick = function (e) {
             const layerIds = this.value.split(",");
             const visibleLayer = this.checked;
@@ -203,7 +203,9 @@
    map.on('click', 'Bike Shops', (e) => {
      // Copy coordinates array.
      const coordinates = e.features[0].geometry.coordinates.slice();
-     const description = e.features[0].properties.PlaceName;
+     const properties = e.features[0].properties;
+     const description = "<h3>" + properties.PlaceName + "</h3>"
+         + "<p>" + properties.Address + "</p>";
  
      // Ensure that if the map is zoomed out such that multiple
      // copies of the feature are visible, the popup appears
