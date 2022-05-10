@@ -91,27 +91,22 @@
   <div id="map"></div>
   <div id="state-legend" class="grow legend">
     <h4 id="legend-title">Legend</h4>
-    <div>
-      <input type="checkbox" id="pavedpath" class="layer-toggle" value="Paved Trails - BB,Paved Trails - BPRD" checked>
-      <label for="pavedpath">
-        <span style="background-color: #4db04a;"></span>
-        Paved Path – All riders
-      </label>
-    </div>
-    <div>
-      <input type="checkbox" id="unpavedpath" class="layer-toggle" value="Unpaved Trails -- BB,Unpaved Trails - BPRD" checked>
-      <label for="unpavedpath">
-        <span class="dashed-green"></span>
-        Unpaved Path – All riders
-      </label>
-    </div>
+    <div><span style="background-color: #4db04a;"></span>Paved Path – All riders</div>
+    <div><span class="dashed-green"></span>Unpaved Path – All riders</div>
     
     <div><span style="background-color: #377eb9;"></span>All riders</div>     
     <div><span class="blue-black"></span>Riders with above-average skill</div>
     <div><span style="background-color: #000000;"></span>Experienced riders confident in traffic</div>
     <div><span class="yellow-black"></span>Most difficult sections</div>
-    <div><span style="background-color: #bba395;"></span>(Outline) Bike Lanes</div>
+      
     <div><span style="background-color: #ede731;"></span>(Outline) Private Land</div>
+    <div>
+      <input type="checkbox" id="bikelanes" class="layer-toggle" value="Bike Lanes halo" checked>
+      <label for="bikelanes">
+        <span style="background-color: #bba395;"></span>(Outline) Bike Lanes
+      </label>  
+    </div>
+    
     
     <div style="padding-top: 1em">
       <input type="checkbox" id="bikeshops" class="layer-toggle" value="Bike Shops" checked>
