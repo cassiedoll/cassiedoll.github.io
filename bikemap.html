@@ -226,7 +226,7 @@
         for (let i = 0; i < layerToggles.length; i++) {
           if (savedDefaultLayers) {
             // If we have a default layers cookie, set the initial checked value based on that cookie
-            layerToggles[i].checked = savedDefaultLayers.contains(layerToggles[i].value);
+            layerToggles[i].checked = savedDefaultLayers.includes(layerToggles[i].value);
           }
           
           layerToggles[i].onclick = function (e) {
