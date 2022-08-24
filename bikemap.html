@@ -199,13 +199,21 @@
   
   /* New code below */
   
+    // If we have a default layers cookie, update the html checked values based on that cookie
     let cookies = {};
     document.cookie.split(';').forEach(function(el) {
       let [k,v] = el.split('=');
       cookies[k.trim()] = v;
     });
-    let savedDefaultLayers = cookies['defaultLayers'];
-    
+    if (cookies.has('defaultLayers')) {
+      let savedDefaultLayers = cookies['defaultLayers'];
+      const layerToggles = document.getElementsByClassName("layer-toggle");
+      for (let i = 0; i < layerToggles.length; i++) {
+        layerToggles[i].checked = savedDefaultLayers.includes(layerToggles[i].value);
+      }  
+    }
+  
+    // Also update our cookie whenever the user toggles layer visibility
     function updateDefaultLayersCookie() {
       var savedLayerValues = [];
       var savedLayerDivs = document.querySelectorAll('.layer-toggle:checked');
@@ -220,15 +228,10 @@
     // To enable - add a checkbox with the class "layer-toggle" and then put the layerIds (comma separated) 
     // you want to toggle as the value attribute. The checked attribute sets the default visibility onload. Example:
     //   <input type="checkbox" class="layer-toggle" value="Paved Trails - BB,Paved Trails - BPRD" checked>
-    // Note: the default checked behavior may be overriden by a saved cookie value
+    //   Note: the default checked behavior may be overriden by a saved cookie value
     map.on('load', () => {
         const layerToggles = document.getElementsByClassName("layer-toggle");
         for (let i = 0; i < layerToggles.length; i++) {
-          if (savedDefaultLayers) {
-            // If we have a default layers cookie, set the initial checked value based on that cookie
-            layerToggles[i].checked = savedDefaultLayers.includes(layerToggles[i].value);
-          }
-          
           layerToggles[i].onclick = function (e) {
             const layerIds = this.value.split(",");
             const visibleLayer = this.checked;
