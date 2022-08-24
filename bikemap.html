@@ -108,8 +108,9 @@
     <div><span class="yellow-black"></span>Most difficult sections</div>
       
     <div><span style="background-color: #ede731;"></span>(Outline) Private Land</div>
+    
     <div>
-      <input type="checkbox" id="bikelanes" class="layer-toggle" value="Bike Lanes halo" checked>
+      <input type="checkbox" id="bikelanes" class="layer-toggle" value="Bike Lanes halo">
       <label for="bikelanes">
         <span style="background-color: #bba395;"></span>(Outline) Bike Lanes
       </label>  
@@ -128,12 +129,12 @@
         Street Names
       </label>
     </div>
-    <div>
+    <!--div>
       <input type="checkbox" id="satellite" class="layer-toggle" value="mapbox-satellite">
       <label for="satellite">
         Satellite View
       </label>
-    </div>
+    </div-->
     
     </div>
 </div>
@@ -169,7 +170,7 @@
       onAdd(map) {
         this._container = document.createElement('div');
         this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-        this._container.innerHtml = '<button class="mapboxgl-ctrl-fullscreen" type="button"><span class="mapboxgl-ctrl-icon"></span></button>';
+        this._container.innerHTML = '<button class="mapboxgl-ctrl-fullscreen" type="button"><span class="mapboxgl-ctrl-icon"></span></button>';
         this._container.onclick = function() { window.location = "https://bendbikes.org/wp-content/uploads/map.html"; };
         return this._container;
       }
