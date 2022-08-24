@@ -43,8 +43,12 @@
         overflow: hidden;
     }
     
-    
     /* existing or not-relevant css */
+    @media only screen and (max-width: 600px) {
+      body {
+        padding: 1em; /* reduce padding on mobile */
+      }
+    } 
     
     #map {
         height: 90vh;
@@ -153,8 +157,29 @@
     );
 
     // Fullscreen & nav controls
-    map.addControl(new mapboxgl.FullscreenControl());
+  
+    // Hide mapbox fullscreen control - we'll display our own instead
+    // map.addControl(new mapboxgl.FullscreenControl());
+    // New custom fullscreen control
+    class CustomFullscreenControl {
+      onAdd(map) {
+        //this._map = map;
+        this._container = document.createElement('div');
+        this._container.className = 'mapboxgl-ctrl mapbox-gl-ctrl-fullscreen';
+        this._container.textContent = 'Hello, world';
+        this._container.onclick = function() { window.location = "https://bendbikes.org/wp-content/uploads/map.html"; };
+        return this._container;
+      }
+ 
+      onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        //this._map = undefined;
+      }
+    }
+    map.addControl(new CustomFullscreenControl());
+  
     map.addControl(new mapboxgl.NavigationControl());
+  
 
     // Add geolocate control to the map.
     map.addControl(
