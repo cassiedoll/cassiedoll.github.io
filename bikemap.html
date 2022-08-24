@@ -205,7 +205,7 @@
       let [k,v] = el.split('=');
       cookies[k.trim()] = v;
     });
-    if (cookies.has('defaultLayers')) {
+    if (cookies.hasOwnProperty('defaultLayers')) {
       let savedDefaultLayers = cookies['defaultLayers'];
       const layerToggles = document.getElementsByClassName("layer-toggle");
       for (let i = 0; i < layerToggles.length; i++) {
