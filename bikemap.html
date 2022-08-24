@@ -44,6 +44,10 @@
     }
     
     /* existing or not-relevant css */
+    body {
+      padding: 5em;
+    }
+    
     @media only screen and (max-width: 600px) {
       body {
         padding: 1em; /* reduce padding on mobile */
@@ -84,7 +88,7 @@
 </style>
 </head>
   
-<body style="padding: 5em;">
+<body>
   
   <div style="padding-bottom: 1em; font-size: 18px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
     aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
@@ -163,17 +167,15 @@
     // New custom fullscreen control
     class CustomFullscreenControl {
       onAdd(map) {
-        //this._map = map;
         this._container = document.createElement('div');
-        this._container.className = 'mapboxgl-ctrl mapbox-gl-ctrl-fullscreen';
-        this._container.textContent = 'Hello, world';
+        this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+        this._container.innerHtml = '<button class="mapboxgl-ctrl-fullscreen" type="button"><span class="mapboxgl-ctrl-icon"></span></button>';
         this._container.onclick = function() { window.location = "https://bendbikes.org/wp-content/uploads/map.html"; };
         return this._container;
       }
  
       onRemove() {
         this._container.parentNode.removeChild(this._container);
-        //this._map = undefined;
       }
     }
     map.addControl(new CustomFullscreenControl());
