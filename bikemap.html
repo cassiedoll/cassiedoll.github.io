@@ -10,8 +10,8 @@
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
   
   <style> 
-     /* slightly different css for the legend */
-    
+     
+  /* NEW CODE: slightly different css for the legend */    
     .legend.grow {
       width: auto !important;
       height: auto !important;
@@ -42,8 +42,10 @@
         right: 10px;
         overflow: hidden;
     }
+  /* End new code */    
     
-    /* existing or not-relevant css */
+    
+    /* Everything below is existing or not-relevant css */
     body {
       padding: 5em;
     }
@@ -109,13 +111,15 @@
       
     <div><span style="background-color: #ede731;"></span>(Outline) Private Land</div>
     
+    
+  <!-- NEW CODE: HTML is slightly different in the legend to add checkboxes next to toggleable layers -->
+    
     <div>
       <input type="checkbox" id="bikelanes" class="layer-toggle" value="Bike Lanes halo">
       <label for="bikelanes">
         <span style="background-color: #bba395;"></span>(Outline) Bike Lanes
       </label>  
     </div>
-    
     
     <div style="padding-top: 1em">
       <input type="checkbox" id="bikeshops" class="layer-toggle" value="Bike Shops" checked>
@@ -129,12 +133,14 @@
         Street Names
       </label>
     </div>
-    <!--div>
+    <!--div> This is how we would include the satellite layer if we wanted it
       <input type="checkbox" id="satellite" class="layer-toggle" value="mapbox-satellite">
       <label for="satellite">
         Satellite View
       </label>
     </div-->
+  <!-- End new code -->
+    
     
     </div>
 </div>
@@ -163,8 +169,8 @@
 
     // Fullscreen & nav controls
   
-    // Hide mapbox fullscreen control - we'll display our own instead
-    // map.addControl(new mapboxgl.FullscreenControl());
+  
+  // NEW CODE: Replace mapbox fullscreen control with a custom one
     // New custom fullscreen control
     class CustomFullscreenControl {
       onAdd(map) {
@@ -179,7 +185,10 @@
         this._container.parentNode.removeChild(this._container);
       }
     }
+    // map.addControl(new mapboxgl.FullscreenControl()); <-- We replace the mapbox fullscreen with our custom one
     map.addControl(new CustomFullscreenControl());
+  // End of new code
+  
   
     map.addControl(new mapboxgl.NavigationControl());
   
@@ -197,7 +206,7 @@
   
   
   
-  /* New code below */
+ // NEW CODE: layer cookies, layer toggling, grow/hide legend onclick, and clickable bike shop layer
   
     // If we have a default layers cookie, update the html checked values based on that cookie
     let cookies = {};
@@ -248,7 +257,7 @@
       legend.classList.toggle('grow');
     }
   
-    // When a click event occurs on a feature in the places layer, open a popup at the
+    // When a click event occurs on a feature in the Bike Shop layer, open a popup at the
     // location of the feature, with description HTML from its properties.
    map.on('click', 'Bike Shops', (e) => {
      // Copy coordinates array.
@@ -279,6 +288,7 @@
    map.on('mouseleave', 'Bike Shops', () => {
      map.getCanvas().style.cursor = '';
    });
+// End of new code
   
   </script>
   </body>
